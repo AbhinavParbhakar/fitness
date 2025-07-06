@@ -1,5 +1,6 @@
 import { Button, Pressable, StyleSheet, Text, View } from "react-native";
 import {Camera, CameraView, useCameraPermissions} from 'expo-camera'
+import { SafeAreaView } from "react-native-safe-area-context";
 import { useState } from "react";
 import LoggingScreenComponent from "@/components/LoggingScreen";
 import Ionicons from "@expo/vector-icons/Ionicons";
@@ -34,7 +35,7 @@ export default function about(){
 
 
     return(
-        <View style={styles.container}>
+        <SafeAreaView style={styles.container}>
             {!permission?.granted ? 
             <View style={{flex:1,flexDirection:'column',justifyContent:'center',alignItems:'center'}}>
                 <Ionicons name="camera" color='#e5ffff' size={40}/>
@@ -47,6 +48,6 @@ export default function about(){
             : 
             <LoggingScreenComponent />
             }
-        </View>
+        </SafeAreaView>
     )
 }

@@ -7,35 +7,36 @@ import { LoggingScreenNutrientsProps, OpenFoodFactsReturnType } from "@/types";
 export default function LoggingScreenComponent(){
 
     const [barcode,setBarcode] = useState('')
-    const [macros,setMacros] = useState<LoggingScreenNutrientsProps>({calories:0,carbs:0,protein:0,fat:0})
-    const [macrosFound, setMacrosFound] = useState(false)
+    const [macros,setMacros] = useState<LoggingScreenNutrientsProps>({calories:0,carbs:0,protein:0,fat:0, name:''})
 
     const fetchMacros = async() =>{
-        const response = await fetch(`https://world.openfoodfacts.net/api/v2/product/${barcode}?fields=nutriments`)
+        const url = `https://world.openfoodfacts.net/api/v2/product/${barcode}?fields=nutriments,product_name`
+        const response = await fetch(url,{method:'GET'})
         const response_body = await response.json() as OpenFoodFactsReturnType
-        console.log(barcode)
-        console.log(response_body.status)
         if (response_body.status == 0){
-            setMacrosFound(false)
             Alert.alert('MacroCounter','Food Not Found')
+            console.error('This was the barcode: ' + barcode)
+            console.error('This was the link: ' + url)
         }else{
-            setMacrosFound(true)
             setMacros({
-                calories:response_body.product.nutriments?.energy_value as number,
-                carbs: response_body.product.nutriments?.carbohydrates_value as number,
-                protein: response_body.product.nutriments?.proteins_value as number,
-                fat: response_body.product.nutriments?.fat_value as number
+                calories:response_body.product?.nutriments.energy_value as number,
+                carbs: response_body.product?.nutriments.carbohydrates_value as number,
+                protein: response_body.product?.nutriments.proteins_value as number,
+                fat: response_body.product?.nutriments.fat_value as number,
+                name: response_body.product?.product_name as string
             })
+            console.log(macros)
         }
-        
+        return response_body        
     }
 
     CameraView.onModernBarcodeScanned((event)=>{
-        CameraView.dismissScanner()
-        setBarcode(event.data)
-        if (!macrosFound){
-            console.log(barcode)
-            fetchMacros()
+        if (event.type != undefined){
+            setBarcode(barcode => event.data)
+            if (barcode != ''){
+                fetchMacros()
+                CameraView.dismissScanner()
+            }
         }
     })
 
@@ -48,15 +49,19 @@ export default function LoggingScreenComponent(){
             flex:1,
             flexDirection:'row',
             alignItems:'center',
-            justifyContent:'space-between'
+            justifyContent:'center',
+            borderWidth:5,
+            borderColor: '#1ae8fc'
         },
         scan_button:{
             backgroundColor:'#1ca9c9',
-            borderRadius:10
+            borderRadius:10,
+            margin:2
         },
         log_button:{
             backgroundColor:'#76ee00',
-            borderRadius:10
+            borderRadius:10,
+            margin:2
         },
         button_text:{
             fontSize:25,
@@ -72,6 +77,7 @@ export default function LoggingScreenComponent(){
                     calories={macros.calories}
                     carbs={macros.carbs}
                     fat={macros.fat}
+                    name={macros.name}
                     />
                 <View style={styles.buttons_container}>
                     <Pressable style={styles.scan_button} onTouchStart={(event)=>{CameraView.launchScanner({barcodeTypes:['upc_a']})}}> 
@@ -79,11 +85,11 @@ export default function LoggingScreenComponent(){
                         Scan
                         </Text>
                     </Pressable>
-                <Pressable style={styles.log_button}> 
-                    <Text style={styles.button_text}>
-                        Log
-                    </Text>
-                </Pressable>
+                    <Pressable style={styles.log_button}> 
+                        <Text style={styles.button_text}>
+                            Log
+                        </Text>
+                    </Pressable>
                 </View>
             </View>
     )
