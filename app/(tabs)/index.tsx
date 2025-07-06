@@ -6,6 +6,7 @@ import { db } from "@/firebaseConfig";
 import { collection,query,where,getDocs, QuerySnapshot } from "firebase/firestore";
 import { useEffect,useState } from "react";
 
+
 type FoodClass = {
   Calories:number,
   Carbs:number,
