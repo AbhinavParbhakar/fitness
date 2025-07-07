@@ -8,34 +8,48 @@ export default function LoggingScreenComponent(){
 
     const [barcode,setBarcode] = useState('')
     const [macros,setMacros] = useState<LoggingScreenNutrientsProps>({calories:0,carbs:0,protein:0,fat:0, name:''})
+    let barcodeSet = false
 
-    const fetchMacros = async() =>{
-        const url = `https://world.openfoodfacts.net/api/v2/product/${barcode}?fields=nutriments,product_name`
+
+    const resetLogging = () =>{
+        setBarcode('')
+        setMacros({calories:0,carbs:0,protein:0,fat:0, name:''})
+    }
+
+    const fetchMacros = async(tempBarcode:string) =>{
+        const url = `https://world.openfoodfacts.net/api/v2/product/${tempBarcode}?fields=nutriments,product_name`
         const response = await fetch(url,{method:'GET'})
         const response_body = await response.json() as OpenFoodFactsReturnType
         if (response_body.status == 0){
             Alert.alert('MacroCounter','Food Not Found')
-            console.error('This was the barcode: ' + barcode)
+            console.error('This was the barcode: ' + tempBarcode)
             console.error('This was the link: ' + url)
         }else{
+            const calories = response_body.product?.nutriments.energy_value as number
+            const carbs = response_body.product?.nutriments.carbohydrates_value as number
+            const protein = response_body.product?.nutriments.proteins_value as number
+            const fat = response_body.product?.nutriments.fat_value as number
+            const name = response_body.product?.product_name as string
             setMacros({
-                calories:response_body.product?.nutriments.energy_value as number,
-                carbs: response_body.product?.nutriments.carbohydrates_value as number,
-                protein: response_body.product?.nutriments.proteins_value as number,
-                fat: response_body.product?.nutriments.fat_value as number,
-                name: response_body.product?.product_name as string
+                calories: typeof calories != typeof undefined ? calories : 0,
+                carbs:  typeof carbs != typeof undefined ? carbs : 0,
+                protein: typeof protein != typeof undefined ? protein : 0,
+                fat:  typeof fat != typeof undefined ? fat : 0,
+                name: typeof name != typeof undefined ? name : "",
             })
-            console.log(macros)
         }
         return response_body        
     }
 
     CameraView.onModernBarcodeScanned((event)=>{
+        const tempBarcode = event.data
         if (event.type != undefined){
-            setBarcode(barcode => event.data)
-            if (barcode != ''){
-                fetchMacros()
+            setBarcode(event.data)
+            if (!barcode){
+                barcodeSet = true
+                fetchMacros(tempBarcode)
                 CameraView.dismissScanner()
+                barcodeSet = false
             }
         }
     })

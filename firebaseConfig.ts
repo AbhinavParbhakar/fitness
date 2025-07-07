@@ -10,8 +10,6 @@ const firebaseConfig = {
   appId: process.env.EXPO_PUBLIC_API_appId
 };
 
-console.log(process.env.EXPO_PUBLIC_API_apiKey)
-
 const app = initializeApp(firebaseConfig)
 const db = getFirestore(app)
 

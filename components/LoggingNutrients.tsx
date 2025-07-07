@@ -20,22 +20,19 @@ export default function LoggingNutrientsComponent({calories, carbs, fat, protein
             alignItems:'center',
             width:'100%',
             borderColor: '#fafcfc',
-            borderTopWidth:2,
         },
         macros_container:{
             flex:1,
             flexDirection:'row',
             justifyContent:'center',
             alignItems:'center',
-            borderTopWidth:2,
-            borderBottomWidth:2,
-            borderColor: '#fafcfc'
         },
         calories_container:{
             flex:1,
             flexDirection:'column',
             justifyContent:'center',
             alignItems:'center',
+            padding:5
         },
         nutrients_container:{
             flex:1,
@@ -43,14 +40,13 @@ export default function LoggingNutrientsComponent({calories, carbs, fat, protein
             flexDirection:'column',
             justifyContent:'space-evenly',
             alignItems:'center',
-            borderLeftWidth:2,
-            borderColor:'#fafcfc'
+
         },
         calories_header_text:{
             color:'#e5ffff',
             fontSize:35,
             fontFamily:'Roboto_600SemiBold',
-            marginHorizontal:10
+            padding:5
         },
         calories_text:{
             color:'#bae1ff',
@@ -58,40 +54,60 @@ export default function LoggingNutrientsComponent({calories, carbs, fat, protein
             fontFamily:'Roboto_400Regular'
         },
         nutrient_header_text:{
-            color:'#c9d4d3',
+            color:'#e5ffff',
             fontSize:30,
             fontFamily:'Roboto_500Medium',
-            marginHorizontal:5
+            padding:5,
         },
         name_header:{
             minHeight:30,
-            textAlignVertical:'center',
-            textAlign:'center',
             color: '#e5ffff',
-            fontSize:40,
+            fontSize:25,
             fontFamily:'Roboto_700Bold',
-            marginHorizontal:5
+            textAlignVertical:'center',
+            margin:5,
         },
         individual_nutrient_container:{
             flex:1,
             flexDirection:'column',
             alignItems:'center',
-            justifyContent:'space-evenly'
+            justifyContent:'space-evenly',
+            backgroundColor:'#45484d',
+            minWidth: 120,
+            borderWidth:3,
+            borderRadius:12,
+            borderColor: '#e5ffff',
+            marginVertical:3
         },
         carbs_text:{
             fontFamily:'Roboto_400Regular',
             fontSize:20,
-            color:'#ffab99'
+            color:'#bab804',
+            backgroundColor: '#fafafa',
+            minWidth:100,
+            padding:5,
+            textAlign:'center',
+            borderRadius:12
         },
         fat_text:{
             fontFamily:'Roboto_400Regular',
             fontSize:20,
-            color:'#ffd966'
+            color:'#d40007',
+            backgroundColor: '#fafafa',
+            minWidth:100,
+            padding:5,
+            textAlign:'center',
+            borderRadius:12
         },
         protein_text:{
             fontFamily:'Roboto_400Regular',
             fontSize:20,
-            color:'#29d96c'
+            color:'#04ba07',
+            backgroundColor: '#fafafa',
+            minWidth:100,
+            padding:5,
+            textAlign:'center',
+            borderRadius:12
         },
 
     })
